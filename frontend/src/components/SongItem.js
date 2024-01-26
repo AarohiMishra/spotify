@@ -15,7 +15,7 @@ function SongItem({item}) {
                 title:title,
                 artist:artist,
                 image:image,
-                url:url,
+                url: `http://127.0.0.1:5000/api/stream?artist=${artist}&song=${title}`,
             }
         );
         setIsplaying(true)

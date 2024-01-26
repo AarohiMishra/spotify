@@ -8,19 +8,40 @@ function Search() {
     const [searchTerm,setSearchTerm]=useState("");
     const [searchResults,setSearchResults]=useState([]);
     const context=useContext(songContext);
-    const {songs}=context;
-
-    const handleSearch=()=>{
-        const index=songs.findIndex((x)=>x.title===searchTerm);
-        if (index!==-1){
-            setSearchResults([songs[index]]);
-
-        }
-        else{
-            setSearchResults([]);
-        }
-    };
-
+    const {songs,
+        setSongs,
+        isplaying,
+        setisplaying,
+        currentSong,
+        setCurrentSong,
+        ct,
+        setCt,
+      } = context;
+    
+    
+      const handleSearch = () => {
+        fetch("http://127.0.0.1:5000/api/search", {
+          method: "POST",
+          body: new URLSearchParams({ search_box: searchTerm }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setSearchResults(data);
+          });
+      };
+    
+      const playSong = (artist, title, image, id) => {
+        setCurrentSong({
+          id: id,
+          title: title,
+          artist: artist,
+          image: image,
+          url: `http://127.0.0.1:5000/api/stream?artist=${artist}&song=${title}`,
+        });
+      };
   return (
     <div className='overflow-y-auto h-screen'>
     <div className='mr-auto ml-4 relative mt-2'>
